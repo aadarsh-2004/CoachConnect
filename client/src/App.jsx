@@ -7,7 +7,11 @@ import './App.css';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 
-import { BrowserRouter as Router ,Routes ,Route } from 'react-router-dom';
+
+import { BrowserRouter as Router ,Routes ,Route  } from 'react-router-dom';
+import Navbar from './Components/Navbar';
+import LandingPage from './Pages/LandingPage';
+import Dashboard from './Pages/Dashboard';
 
 function App() {
   const [user ,setuser]=useState(null);
@@ -20,15 +24,20 @@ function App() {
   }, []);
 
   
-
-
+  
+   
   return (
     <>
+    
     <Router>
+    
+    
       <Routes>
-        <Route path="/" element={user ? <h1>Welcome, {user.email}</h1> : <Login />} />
+        
+        <Route path="/" element={<LandingPage/>} />
         <Route path='/signup' element={<SignUp/>} />
         <Route path='/signin' element={<Login/>} />
+        <Route path='/Dashboard' element={<Dashboard/>} />
         
       </Routes>
     </Router>

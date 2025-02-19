@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase'; // Import Firebase auth
+import { auth } from '../firebase';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
 
 const Login = () => {
@@ -9,129 +9,118 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Google and Facebook Providers
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
 
-  // Handle Email/Password Login
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard'); // Redirect after successful login
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     setError('');
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/dashboard'); // Redirect after successful login
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Handle Facebook Sign-In
   const handleFacebookSignIn = async () => {
     setError('');
     try {
       await signInWithPopup(auth, facebookProvider);
-      navigate('/dashboard'); // Redirect after successful login
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div className='min-h-screen min-w-screen bg-white flex md:items-center md:justify-center p-4'>
-      <div className='container max-w-6xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row'>
-        {/* Right Section - Moved to top for mobile, hidden for md and up */}
-        <div className='w-full h-[180px] md:hidden flex justify-center items-center bg-black rounded-t-xl'>
-          <img src="loginlogo.png" alt="Decorative artwork" className='w-[200px] h-[150px] rounded-2xl' />
-        </div>
+    <div className='min-h-screen min-w-screen bg-black flex items-center justify-center p-4 relative '>
+      {/* Decorative Circles */}
+      <div className='absolute top-[-100px] left-[5%] w-52 h-52 rounded-full bg-gradient-to-r from-cyan-400/20 to-cyan-600/20 blur-2xl z-0'></div>
+      <div className='absolute bottom-[10px] right-[5%] w-36 h-36 rounded-full bg-gradient-to-r from-cyan-600/20 to-purple-600/20 blur-xl z-0'></div>
+      <div className='absolute top-[15%] right-[15%] w-32 h-32  rounded-full bg-gradient-to-r from-purple-400/20 to-cyan-400/20 blur-lg z-0'></div>
+      <div className='absolute top-[30%] left-[25%] w-48 h-48 rounded-full bg-gradient-to-r from-cyan-600/20 to-purple-400/20 blur-md z-0'></div>
 
-        {/* Left Section */}
-        <div className='w-full md:w-1/2 p-2 md:p-6 m-0'>
-          <div className='max-w-sm mx-auto'>
-            <h1 className='text-3xl font-bold text-gray-900 mb-2'>Welcome Back 👋</h1>
-            <p className='text-gray-500 font-serif mb-4'>
-              Today is a new day. It's your day.<br />Sign in to ConnectCoach.
-            </p>
 
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-            <form onSubmit={handleLogin} className='space-y-1 p-2 md:p-4 bg-gray-50 shadow-xl border-dashed border-gray-300 border-2 rounded-2xl'>
-              <div className='space-y-1 w-full md:px-4 md:py-1'>
-                <label htmlFor="email" className='text-sm font-medium text-gray-700'>Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  required
-                  placeholder='Example@email.com'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
-                />
-              </div>
+      <div className='w-[500px] mx-auto bg-transparent p-6 space-y-6'>
+        <h1 className='text-4xl font-bold text-white text-center mb-4'>
+          Login Now
+        </h1>
+        <p className='text-white font-serif text-center mb-6'>
+          Sign in to continue your journey with <span className='text-cyan-400'>  Mentor.ai </span>  
+        </p>
 
-              <div className='space-y-1 md:px-4 md:py-1'>
-                <label htmlFor="password" className='text-sm font-medium text-gray-700'>Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  required
-                  placeholder='At least 8 characters'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
-                />
-              </div>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-              <div className='text-right md:px-4'>
-                <Link to="#" className='text-blue-600 hover:text-blue-800 text-sm font-medium'>Forgot Password?</Link>
-              </div>
-
-              <button type="submit" className='w-full bg-gray-900 text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium'>
-                Sign in
-              </button>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-gray-50 text-gray-500">Or</span>
-                </div>
-              </div>
-
-              <div className='space-y-4'>
-                <button type="button" onClick={handleGoogleSignIn} className='text-[13px] md:text-[16px] w-full flex items-center justify-center gap-2 border font-mono border-gray-300 rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors duration-200'>
-                  <img src="https://w7.pngwing.com/pngs/63/1016/png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-thumbnail.png" alt="Google logo" className="w-5 h-5" />
-                  Sign in with Google
-                </button>
-                
-                <button type="button" onClick={handleFacebookSignIn} className='text-[13px] md:text-[16px] w-full font-mono flex items-center justify-center gap-2 border border-gray-300 rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors duration-200'>
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/768px-2023_Facebook_icon.svg.png" alt="Facebook logo" className="w-5 h-5" />
-                  Sign in with Facebook
-                </button>
-              </div>
-
-              <p className="text-center text-gray-600 text-sm">
-                Don't have an account? <Link to="/signup" className="text-blue-600 hover:text-blue-800 font-medium">Sign up</Link>
-              </p>
-            </form>
+        <form onSubmit={handleLogin} className='space-y-4 p-6 bg-white/10 shadow-lg backdrop-blur-md border-2 border-dashed border-gray-300 rounded-2xl'>
+          <div className='space-y-2'>
+            <label htmlFor="email" className='text-sm font-medium text-white'>Email</label>
+            <input
+              type="email"
+              id="email"
+              required
+              placeholder='Enter your email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all'
+            />
           </div>
-        </div>
 
-        {/* Right Section - Hidden for mobile, shown for md and up */}
-        <div className='hidden md:flex md:w-1/2 bg-black md:justify-center md:items-center rounded-r-xl'>
-          <img src="loginlogo.png" alt="Decorative artwork" className='w-[450px] h-[400px] rounded-2xl' />
-        </div>
+          <div className='space-y-2'>
+            <label htmlFor="password" className='text-sm font-medium text-white'>Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              placeholder='Enter your password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className='w-full px-4 py-3 rounded-lg border bg-white border-gray-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all'
+            />
+          </div>
+
+          <div className='text-right'>
+            <Link to="#" className='text-blue-600 hover:text-blue-800 text-sm font-medium'>Forgot Password?</Link>
+          </div>
+
+          <button type="submit" className='w-full bg-black  font-medium border-cyan-500 border-2 text-white py-3 px-4 rounded-lg hover:bg-cyan-500 hover:text-black transition-colors duration-200'>
+            Sign in
+          </button>
+
+          <div className="relative">
+            
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-transparent text-gray-200">Or</span>
+            </div>
+          </div>
+
+          <div className='space-y-4'>
+            <button type="button" onClick={handleGoogleSignIn} className='text-[14px] text-white w-full flex items-center justify-center gap-2 border font-mono border-gray-300 rounded-lg px-4 py-3  '>
+              <img src="https://w7.pngwing.com/pngs/63/1016/png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-thumbnail.png" alt="Google logo" className="w-5 h-5" />
+              Sign in with Google
+            </button>
+
+            {/* <button type="button" onClick={handleFacebookSignIn} className='text-[14px] text-white w-full font-mono flex items-center justify-center gap-2 border border-gray-300 rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors duration-200'>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/768px-2023_Facebook_icon.svg.png" alt="Facebook logo" className="w-5 h-5" />
+              Sign in with Facebook
+            </button> */}
+          </div>
+
+          <p className="text-center text-gray-600 text-sm">
+            Don't have an account? <Link to="/signup" className="text-blue-600 hover:text-blue-800 font-medium">Sign up</Link>
+          </p>
+        </form>
       </div>
     </div>
   );
