@@ -106,10 +106,12 @@ const MainNavbar = () => {
               <Bell className="w-5 h-5" />
             </button>
             {/* Wallet Icon */}
-            <div className="flex items-center space-x-2 ml-4 rounded-full bg-[#1c2b2a] px-4 py-2">
-              <Wallet className="text-yellow-500" />
-              {/* <span className="text-white">₹0.00</span> */}
+            <Link to="/wallet">
+              <div className="flex items-center space-x-2 ml-4 rounded-full bg-[#1c2b2a] px-4 py-2">
+                <Wallet className="text-yellow-500" />
+                {/* <span className="text-white">₹0.00</span> */}
             </div>
+            </Link>
           </div>
 
           {/* Desktop View: Search Bar, Notification, Wallet and Profile */}
@@ -146,6 +148,7 @@ const MainNavbar = () => {
               <Bell className="w-5 h-5" />
             </button>
             {/* Wallet Icon */}
+            <Link to="/wallet">
             <button className="flex items-center space-x-3 ml-4 gap-6">
               <div className="flex items-center space-x-2">
                 <div className="flex items-center justify-center gap-4 rounded-full font-semibold bg-[#1c2b2a] px-5 py-2 border border-gray-700">
@@ -156,7 +159,11 @@ const MainNavbar = () => {
                   </div>
                 </div>
               </div>
+            </button>
+              </Link>
+              
               {/* Profile Icon */}
+              <Link to="/profile">
               <button className="flex justify-center items-center gap-1 ">
                 <div className=" bg-cyan-400 rounded-3xl w-12 h-12 p-3 text-center">
                   <span className="text-black font-bold">AS</span>
@@ -175,7 +182,8 @@ const MainNavbar = () => {
                   />
                 </svg>
               </button>
-            </button>
+              </Link>
+            
           </div>
         </div>
       </div>

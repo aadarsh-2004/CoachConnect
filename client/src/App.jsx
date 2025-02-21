@@ -12,6 +12,8 @@ import { BrowserRouter as Router ,Routes ,Route  } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import LandingPage from './Pages/LandingPage';
 import Dashboard from './Pages/Dashboard';
+import Profile from './Pages/Profile';
+import Wallet from './Pages/Wallet';
 
 function App() {
   const [user ,setuser]=useState(null);
@@ -38,6 +40,8 @@ function App() {
         <Route path='/signup' element={<SignUp/>} />
         <Route path='/signin' element={<Login/>} />
         <Route path='/Dashboard' element={<Dashboard/>} />
+        <Route path='/profile' element={<Profile/>} />
+        <Route path='/wallet' element={<Wallet/>} />
         
       </Routes>
     </Router>
