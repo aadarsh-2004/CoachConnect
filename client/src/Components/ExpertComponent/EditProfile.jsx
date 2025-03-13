@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   Upload,
@@ -13,10 +13,9 @@ import {
   User,
   Calendar,
 } from "lucide-react";
-import HeroSection from "../UserDashboard.js/HeroSection";
 
-const ProfileSetup = ({ initialData, onSave }) => {
-  // Main form state
+const ProfileSetup = () => {
+  // Form data state
   const [formData, setFormData] = useState({
     basic: {
       firstName: "",
@@ -24,7 +23,6 @@ const ProfileSetup = ({ initialData, onSave }) => {
       designation: "",
       email: "",
       dob: "",
-      phone: "",
     },
     about: {
       experience: "",
@@ -34,7 +32,6 @@ const ProfileSetup = ({ initialData, onSave }) => {
     },
     expertise: {
       areas: "",
-      documents: [],
     },
     pricing: {
       videoCall: "",
@@ -49,14 +46,6 @@ const ProfileSetup = ({ initialData, onSave }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load initial data if provided
-  useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
-    }
-  }, [initialData]);
-
-  // Handle input changes
   const handleInputChange = (section, field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -67,42 +56,43 @@ const ProfileSetup = ({ initialData, onSave }) => {
     }));
   };
 
-  // Handle form submission
+  const handleFileUpload = (file, type) => {
+    if (!file) return;
+    // Handle file upload logic here
+    console.log(`Uploading ${type}:`, file);
+  };
+
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-
-      if (onSave) {
-        await onSave(formData);
+      const response = await fetch("http://localhost:5000/api/mentors/update", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.basic.email, // Identify user via email
+          updatedProfile: formData, // Send updated profile data
+        }),
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        alert("Profile updated successfully!");
+      } else {
+        throw new Error(result.message || "Failed to update profile");
       }
-
-      // For future database integration:
-      // const response = await fetch('/api/profile', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
-      // const data = await response.json();
-    } catch (err) {
-      setError("Failed to save profile. Please try again.");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile");
     } finally {
       setLoading(false);
     }
   };
-
-  // File upload handler
-  const handleFileUpload = (file, type) => {
-    // Future implementation for file upload
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // await fetch('/api/upload', { method: 'POST', body: formData });
-  };
+  
 
   return (
-    
-
-    <div className="  min-h-full  bg-transparent p-4 md:p-6 lg:p-8"> {/* Adjusted height and padding-top */}
+    <div className="min-h-full bg-transparent p-4 md:p-6 lg:p-8 font-medium">
       <div className="max-w-7xl mx-auto mt-24">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -156,9 +146,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
                     type="file"
                     className="hidden"
                     accept="image/*"
-                    onChange={(e) =>
-                      handleFileUpload(e.target.files[0], "image")
-                    }
+                    onChange={(e) => handleFileUpload(e.target.files[0], "image")}
                   />
                 </label>
                 <label className="px-4 py-2 bg-gray-800 rounded-lg text-white flex items-center gap-2 cursor-pointer hover:bg-gray-700 transition-colors">
@@ -168,9 +156,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
                     type="file"
                     className="hidden"
                     accept="video/*"
-                    onChange={(e) =>
-                      handleFileUpload(e.target.files[0], "video")
-                    }
+                    onChange={(e) => handleFileUpload(e.target.files[0], "video")}
                   />
                 </label>
               </div>
@@ -218,9 +204,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
             {/* Basic Info Section */}
             <div className="bg-gray-900 rounded-lg overflow-hidden">
               <button
-                onClick={() =>
-                  setActiveSection(activeSection === "basic" ? "" : "basic")
-                }
+                onClick={() => setActiveSection(activeSection === "basic" ? "" : "basic")}
                 className="w-full p-4 flex justify-between items-center text-white hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
@@ -262,11 +246,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
                       className="bg-black text-white p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-teal-600"
                       value={formData.basic.designation}
                       onChange={(e) =>
-                        handleInputChange(
-                          "basic",
-                          "designation",
-                          e.target.value
-                        )
+                        handleInputChange("basic", "designation", e.target.value)
                       }
                     />
                     <input
@@ -294,9 +274,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
             {/* About Me Section */}
             <div className="bg-gray-900 rounded-lg overflow-hidden">
               <button
-                onClick={() =>
-                  setActiveSection(activeSection === "about" ? "" : "about")
-                }
+                onClick={() => setActiveSection(activeSection === "about" ? "" : "about")}
                 className="w-full p-4 flex justify-between items-center text-white hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
@@ -346,11 +324,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
                       className="bg-black text-white p-3 rounded-lg w-full min-h-[100px] focus:outline-none focus:ring-2 focus:ring-teal-600"
                       value={formData.about.description}
                       onChange={(e) =>
-                        handleInputChange(
-                          "about",
-                          "description",
-                          e.target.value
-                        )
+                        handleInputChange("about", "description", e.target.value)
                       }
                     />
                   </div>
@@ -361,11 +335,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
             {/* Expertise Section */}
             <div className="bg-gray-900 rounded-lg overflow-hidden">
               <button
-                onClick={() =>
-                  setActiveSection(
-                    activeSection === "expertise" ? "" : "expertise"
-                  )
-                }
+                onClick={() => setActiveSection(activeSection === "expertise" ? "" : "expertise")}
                 className="w-full p-4 flex justify-between items-center text-white hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
@@ -391,29 +361,24 @@ const ProfileSetup = ({ initialData, onSave }) => {
                         handleInputChange("expertise", "areas", e.target.value)
                       }
                     />
-                    <label className="px-4 py-2 bg-black text-white rounded-lg flex items-center gap-2 cursor-pointer hover:bg-gray-700 transition-colors">
+                    {/* <label className="px-4 py-2 bg-black text-white rounded-lg flex items-center gap-2 cursor-pointer hover:bg-gray-700 transition-colors">
                       <Upload size={16} />
                       <span>Attach Document/License</span>
                       <input
                         type="file"
                         className="hidden"
-                        onChange={(e) =>
-                          handleFileUpload(e.target.files[0], "document")
-                        }
+                        onChange={(e) => handleFileUpload(e.target.files[0], "document")}
                       />
-                    </label>
+                    </label> */}
                   </div>
                 </div>
               )}
             </div>
 
-            
             {/* Prices Section */}
             <div className="bg-gray-900 rounded-lg overflow-hidden">
               <button
-                onClick={() =>
-                  setActiveSection(activeSection === "prices" ? "" : "prices")
-                }
+                onClick={() => setActiveSection(activeSection === "prices" ? "" : "prices")}
                 className="w-full p-4 flex justify-between items-center text-white hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
@@ -437,14 +402,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
                         type="number"
                         placeholder="Video Call Price"
                         className="bg-transparent text-white w-full focus:outline-none focus:ring-2 focus:ring-cyan-600 rounded-sm"
-                        value={formData.pricing.videoCall}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "pricing",
-                            "videoCall",
-                            e.target.value
-                          )
-                        }
+                        
                       />
                     </div>
 
@@ -454,14 +412,8 @@ const ProfileSetup = ({ initialData, onSave }) => {
                         type="number"
                         placeholder="Chat Price"
                         className="bg-transparent text-white w-full focus:outline-none focus:ring-2 focus:ring-cyan-600 rounded-sm"
-                        value={formData.pricing.chatPrice}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "pricing",
-                            "chatPrice",
-                            e.target.value
-                          )
-                        }
+                        
+                        
                       />
                     </div>
 
@@ -471,14 +423,7 @@ const ProfileSetup = ({ initialData, onSave }) => {
                         type="number"
                         placeholder="Audio Call Price"
                         className="bg-transparent text-white w-full focus:outline-none focus:ring-2 focus:ring-cyan-600 rounded-sm"
-                        value={formData.pricing.audioCall}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "pricing",
-                            "audioCall",
-                            e.target.value
-                          )
-                        }
+                        
                       />
                     </div>
                   </div>

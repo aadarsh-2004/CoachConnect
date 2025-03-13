@@ -77,11 +77,13 @@ const HeroSection = () => {
         <div className="max-w-2xl mx-auto md:mt-8 ">
           <div className="flex items-center bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-2">
             <div class="relative flex justify-center items-center w-[28px] h-[28px] bg-[#000000] rounded-full flex-shrink-0">
+              <a href="https://cdn.botpress.cloud/webchat/v2.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/03/08/08/20250308083623-YPVUYM7S.json">
               <img
                 src="https://application-assets-app-and-web.s3.ap-south-1.amazonaws.com/gif-circle.gif"
                 alt="circle"
                 class="w-[28px] h-[28px] absolute top-0 left-0"
               />
+              </a>
               <Search className="text-white/60 w-3 h-3 " />
             </div>
 

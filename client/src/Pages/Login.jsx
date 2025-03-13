@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { signInWithEmailAndPassword,  GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,7 +10,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const googleProvider = new GoogleAuthProvider();
-  const facebookProvider = new FacebookAuthProvider();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,15 +32,7 @@ const Login = () => {
     }
   };
 
-  const handleFacebookSignIn = async () => {
-    setError('');
-    try {
-      await signInWithPopup(auth, facebookProvider);
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  
 
   return (
     <div className='min-h-screen min-w-screen bg-black flex items-center justify-center p-4 relative '>

@@ -14,6 +14,12 @@ import LandingPage from './Pages/LandingPage';
 import Dashboard from './Pages/Dashboard';
 import Profile from './Pages/Profile';
 import Wallet from './Pages/Wallet';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './Components/ProtectedRoute';
+import VideoCall from './Agora/VideoCall';
+// import AudioCall from './Agora/AudioCall';
+import Chat from './Agora/Chat';
+import Summary from './Components/Summary';
 
 function App() {
   const [user ,setuser]=useState(null);
@@ -30,21 +36,24 @@ function App() {
    
   return (
     <>
-    
+    <AuthProvider>
     <Router>
-    
-    
       <Routes>
         
-        <Route path="/" element={<LandingPage/>} />
+        <Route path="/" element={<LandingPage/>} /> 
+        {/* <Route path="/" element={<AudioCall/>} /> 
+        <Route path="/" element={<VideoCall/>} /> */}
+        <Route path="/" element={<Chat/>} />
+        <Route path="/summary" element={<Summary />} />
         <Route path='/signup' element={<SignUp/>} />
         <Route path='/signin' element={<Login/>} />
-        <Route path='/Dashboard' element={<Dashboard/>} />
-        <Route path='/profile' element={<Profile/>} />
-        <Route path='/wallet' element={<Wallet/>} />
+        <Route path='/Dashboard' element={ <ProtectedRoute><Dashboard/></ProtectedRoute> } />
+        <Route path='/profile' element={<ProtectedRoute> <Profile/></ProtectedRoute>} />
+        <Route path='/wallet' element={ <ProtectedRoute><Wallet/></ProtectedRoute>} />
         
       </Routes>
     </Router>
+    </AuthProvider>
     </>
   );
 }

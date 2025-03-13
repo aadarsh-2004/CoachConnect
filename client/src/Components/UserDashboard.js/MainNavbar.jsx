@@ -120,11 +120,11 @@ const MainNavbar = () => {
               {/* Search */}
               <div className="flex items-center bg-[#1A1A1A] rounded-full border border-gray-700">
                 <div className="flex items-center pl-4">
-                  <div class="relative flex justify-center items-center w-[28px] h-[28px] bg-[#000000] rounded-full flex-shrink-0">
+                  <div className="relative flex justify-center items-center w-[28px] h-[28px] bg-[#000000] rounded-full flex-shrink-0">
                     <img
                       src="https://application-assets-app-and-web.s3.ap-south-1.amazonaws.com/gif-circle.gif"
                       alt="circle"
-                      class="w-[28px] h-[28px] absolute top-0 left-0"
+                      className="w-[28px] h-[28px] absolute top-0 left-0"
                     />
                     <Search className="text-white/60 w-3 h-3 " />
                   </div>

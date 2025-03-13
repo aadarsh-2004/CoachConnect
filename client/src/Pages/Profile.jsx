@@ -3,7 +3,7 @@ import MainNavbar from '../Components/UserDashboard.js/MainNavbar'
 import EditProfile from '../Components/ExpertComponent/EditProfile'
 function Profile() {
   return (
-    <div className='bg-black min-h-screen relative'>
+    <div className='bg-black min-h-screen '>
         {/* Decorative Circles */}
       <div className='absolute top-[10px] left-[-5%] w-72 h-72 rounded-full bg-gradient-to-r from-cyan-400/20 to-cyan-600/20 blur-2xl z-0'></div>
       <div className='absolute bottom-[120px] right-[1%] w-56 h-56 rounded-full bg-gradient-to-r from-cyan-600/20 to-purple-800/20 blur-xl z-0'></div>

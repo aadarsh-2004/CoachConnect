@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Await, Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { createUserWithEmailAndPassword,  GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -14,20 +14,20 @@ const SignUp = () => {
     e.preventDefault();
     setError('');
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const userCredential  = await createUserWithEmailAndPassword(auth, email, password);
+      const user= userCredential.user;
 
-      // Send user details to MongoDB
-      await fetch('http://localhost:5000/signup', {
+      // API to send data to backend
+      await fetch('http://localhost:5000/api/mentors/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           uid: user.uid, 
-          name, 
-          email: user.email 
+          firstname: name,
+          email,
+          password
         })
       });
-
       navigate('/dashboard');
 
     } catch (err) {
@@ -37,25 +37,33 @@ const SignUp = () => {
 
   // Google and Facebook Providers
   const googleProvider = new GoogleAuthProvider();
-  const facebookProvider = new FacebookAuthProvider();
 
   const handleGoogleSignup = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      
+      // Extract first & last name from Google displayName
+      const [firstname, lastname] = user.displayName ? user.displayName.split(' ') : [user.email.split('@')[0], ''];
+
+      // Send user details to MongoDB backend
+      await fetch('http://localhost:5000/api/mentors/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: user.uid,
+          firstname,
+          lastname,
+          email: user.email
+        })
+      });
+
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const handleFacebookSignup = async () => {   
-    try {
-      await signInWithPopup(auth, facebookProvider);
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
   return (
     <div className='min-h-screen min-w-screen bg-black flex items-center justify-center p-4 relative'>
